@@ -1,70 +1,150 @@
-# Getting Started with Create React App
+# WasteLink AI - Next.js Frontend
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This is the Next.js frontend for the WasteLink AI platform, Africa's premier circular economy platform for waste-to-resource trading.
 
-## Available Scripts
+## Features
 
-In the project directory, you can run:
+- **Landing Page**: Hero section with platform overview and statistics
+- **Marketplace**: Browse and purchase waste materials with AI-powered matching
+- **Scanner**: AI-powered waste analysis and quality grading
+- **My Listings**: Manage your waste listings and track sales
+- **Impact Dashboard**: Track environmental and social impact metrics
+- **Responsive Design**: Works on desktop, tablet, and mobile devices
 
-### `npm start`
+## Pages Structure
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- `/` - Landing page with hero section and platform overview
+- `/marketplace` - Browse available waste materials
+- `/scanner` - AI waste scanner for analysis and listing creation
+- `/listings` - Manage your waste listings
+- `/impact` - View impact metrics and success stories
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Getting Started
 
-### `npm test`
+### Prerequisites
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- Node.js 18.0 or later
+- pnpm, npm, or yarn package manager
 
-### `npm run build`
+### Installation
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+1. Navigate to the frontend directory:
+```bash
+cd frontend
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+2. Install dependencies:
+```bash
+pnpm install
+# or
+npm install
+# or
+yarn install
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+3. Run the development server:
+```bash
+pnpm dev
+# or
+npm run dev
+# or
+yarn dev
+```
 
-### `npm run eject`
+4. Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### Build for Production
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```bash
+pnpm build && pnpm start
+# or
+npm run build && npm start
+# or
+yarn build && yarn start
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## Technology Stack
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+- **Next.js 14** - React framework for production
+- **React 18** - JavaScript library for building user interfaces
+- **Tailwind CSS** - Utility-first CSS framework
+- **Lucide React** - Beautiful & consistent icon toolkit
 
-## Learn More
+## Project Structure
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+```
+frontend/
+├── pages/
+│   ├── _app.js          # App wrapper component
+│   ├── index.js         # Landing page
+│   ├── marketplace.js   # Marketplace page
+│   ├── scanner.js       # AI scanner page
+│   ├── listings.js      # My listings page
+│   └── impact.js        # Impact dashboard
+├── components/
+│   └── Layout.js        # Shared layout component
+├── styles/
+│   └── globals.css      # Global styles with Tailwind
+├── public/              # Static assets (images, icons)
+└── package.json         # Dependencies and scripts
+```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Key Components
 
-### Code Splitting
+### Layout Component
+- Shared navigation and header
+- Responsive design
+- Integrated chatbot (TakaBot)
+- User profile display
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+### Pages
+- **Home**: Landing page with hero section and platform features
+- **Marketplace**: Product listings with search and filtering
+- **Scanner**: AI-powered waste analysis tool
+- **Listings**: User's waste listings management
+- **Impact**: Environmental and social impact tracking
 
-### Analyzing the Bundle Size
+## Features
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+### AI Scanner
+- Image upload for waste analysis
+- Real-time AI processing simulation
+- Quality grading and value estimation
+- Market demand analysis
 
-### Making a Progressive Web App
+### Marketplace
+- Advanced search and filtering
+- Location-based results
+- AI confidence scoring
+- Purchase and offer functionality
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+### Impact Tracking
+- Environmental metrics (CO₂ saved, waste diverted)
+- Social impact (jobs created, revenue generated)
+- UN SDG contribution tracking
+- Success stories showcase
 
-### Advanced Configuration
+## Styling
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+The application uses Tailwind CSS for styling with:
+- Responsive design patterns
+- Consistent color scheme (green/blue gradient theme)
+- Modern UI components
+- Accessibility considerations
 
-### Deployment
+## Development Notes
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+- All components are functional components using React hooks
+- State management is handled locally with useState
+- Mock data is used for demonstration purposes
+- Images are referenced from the public directory
+- The design maintains the original color scheme and styling
 
-### `npm run build` fails to minify
+## Next Steps
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+To connect with a real backend:
+1. Replace mock data with API calls
+2. Implement authentication
+3. Add real image upload functionality
+4. Connect to actual AI analysis services
+5. Implement real payment processing
