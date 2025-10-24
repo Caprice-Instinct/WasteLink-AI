@@ -1,4 +1,6 @@
 import Layout from '../components/Layout';
+import MetricCard from '../components/MetricCard';
+import SDGCard from '../components/SDGCard';
 import {
   Leaf,
   Globe,
@@ -31,53 +33,42 @@ export default function Impact() {
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-          <div className="bg-gradient-to-br from-green-500 to-emerald-600 text-white p-6 rounded-xl text-center">
-            <Leaf className="w-8 h-8 mx-auto mb-2" />
-            <div className="text-2xl font-bold">
-              {((impactData.totalWasteDiverted || 0) / 1000).toFixed(1)}K
-            </div>
-            <div className="text-sm opacity-90">Tonnes Diverted</div>
-          </div>
-
-          <div className="bg-gradient-to-br from-blue-500 to-cyan-600 text-white p-6 rounded-xl text-center">
-            <Globe className="w-8 h-8 mx-auto mb-2" />
-            <div className="text-2xl font-bold">
-              {((impactData.co2Saved || 0) / 1000).toFixed(1)}K
-            </div>
-            <div className="text-sm opacity-90">CO₂ Saved (kg)</div>
-          </div>
-
-          <div className="bg-gradient-to-br from-purple-500 to-pink-600 text-white p-6 rounded-xl text-center">
-            <DollarSign className="w-8 h-8 mx-auto mb-2" />
-            <div className="text-2xl font-bold">
-              ${((impactData.revenue || 0) / 1000).toFixed(0)}K
-            </div>
-            <div className="text-sm opacity-90">Revenue Generated</div>
-          </div>
-
-          <div className="bg-gradient-to-br from-orange-500 to-red-600 text-white p-6 rounded-xl text-center">
-            <Users className="w-8 h-8 mx-auto mb-2" />
-            <div className="text-2xl font-bold">
-              {impactData.jobsCreated || 0}
-            </div>
-            <div className="text-sm opacity-90">Jobs Created</div>
-          </div>
-
-          <div className="bg-gradient-to-br from-indigo-500 to-purple-600 text-white p-6 rounded-xl text-center">
-            <TrendingUp className="w-8 h-8 mx-auto mb-2" />
-            <div className="text-2xl font-bold">
-              {impactData.transactionsCompleted || 0}
-            </div>
-            <div className="text-sm opacity-90">Transactions</div>
-          </div>
-
-          <div className="bg-gradient-to-br from-teal-500 to-green-600 text-white p-6 rounded-xl text-center">
-            <Phone className="w-8 h-8 mx-auto mb-2" />
-            <div className="text-2xl font-bold">
-              {((impactData.waterSaved || 0) / 1000).toFixed(0)}K
-            </div>
-            <div className="text-sm opacity-90">Liters Water Saved</div>
-          </div>
+          <MetricCard
+            icon={Leaf}
+            value={`${((impactData.totalWasteDiverted || 0) / 1000).toFixed(1)}K`}
+            label="Tonnes Diverted"
+            gradient="from-green-500 to-emerald-600"
+          />
+          <MetricCard
+            icon={Globe}
+            value={`${((impactData.co2Saved || 0) / 1000).toFixed(1)}K`}
+            label="CO₂ Saved (kg)"
+            gradient="from-blue-500 to-cyan-600"
+          />
+          <MetricCard
+            icon={DollarSign}
+            value={`$${((impactData.revenue || 0) / 1000).toFixed(0)}K`}
+            label="Revenue Generated"
+            gradient="from-purple-500 to-pink-600"
+          />
+          <MetricCard
+            icon={Users}
+            value={impactData.jobsCreated || 0}
+            label="Jobs Created"
+            gradient="from-orange-500 to-red-600"
+          />
+          <MetricCard
+            icon={TrendingUp}
+            value={impactData.transactionsCompleted || 0}
+            label="Transactions"
+            gradient="from-indigo-500 to-purple-600"
+          />
+          <MetricCard
+            icon={Phone}
+            value={`${((impactData.waterSaved || 0) / 1000).toFixed(0)}K`}
+            label="Liters Water Saved"
+            gradient="from-teal-500 to-green-600"
+          />
         </div>
 
         <div className="bg-white rounded-xl p-6 shadow-lg border">
@@ -85,37 +76,34 @@ export default function Impact() {
             UN SDG Contribution
           </h3>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div className="text-center p-4 bg-yellow-50 rounded-lg">
-              <div className="text-3xl font-bold text-yellow-600">SDG 8</div>
-              <div className="text-sm text-gray-700 mt-1">Decent Work</div>
-              <div className="text-xs text-gray-600">
-                {impactData.jobsCreated || 0} jobs created
-              </div>
-            </div>
-            <div className="text-center p-4 bg-blue-50 rounded-lg">
-              <div className="text-3xl font-bold text-blue-600">SDG 11</div>
-              <div className="text-sm text-gray-700 mt-1">Sustainable Cities</div>
-              <div className="text-xs text-gray-600">
-                {((impactData.totalWasteDiverted || 0) / 1000).toFixed(1)}K tonnes
-                processed
-              </div>
-            </div>
-            <div className="text-center p-4 bg-green-50 rounded-lg">
-              <div className="text-3xl font-bold text-green-600">SDG 12</div>
-              <div className="text-sm text-gray-700 mt-1">
-                Responsible Consumption
-              </div>
-              <div className="text-xs text-gray-600">
-                ${((impactData.revenue || 0) / 1000).toFixed(0)}K circular revenue
-              </div>
-            </div>
-            <div className="text-center p-4 bg-emerald-50 rounded-lg">
-              <div className="text-3xl font-bold text-emerald-600">SDG 13</div>
-              <div className="text-sm text-gray-700 mt-1">Climate Action</div>
-              <div className="text-xs text-gray-600">
-                {((impactData.co2Saved || 0) / 1000).toFixed(1)}K kg CO₂ saved
-              </div>
-            </div>
+            <SDGCard
+              number="8"
+              title="Decent Work"
+              description={`${impactData.jobsCreated || 0} jobs created`}
+              bgColor="bg-yellow-50"
+              textColor="text-yellow-600"
+            />
+            <SDGCard
+              number="11"
+              title="Sustainable Cities"
+              description={`${((impactData.totalWasteDiverted || 0) / 1000).toFixed(1)}K tonnes processed`}
+              bgColor="bg-blue-50"
+              textColor="text-blue-600"
+            />
+            <SDGCard
+              number="12"
+              title="Responsible Consumption"
+              description={`$${((impactData.revenue || 0) / 1000).toFixed(0)}K circular revenue`}
+              bgColor="bg-green-50"
+              textColor="text-green-600"
+            />
+            <SDGCard
+              number="13"
+              title="Climate Action"
+              description={`${((impactData.co2Saved || 0) / 1000).toFixed(1)}K kg CO₂ saved`}
+              bgColor="bg-emerald-50"
+              textColor="text-emerald-600"
+            />
           </div>
         </div>
 

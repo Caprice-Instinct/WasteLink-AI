@@ -1,14 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Layout from '../components/Layout';
-import {
-  Search,
-  MapPin,
-  Camera,
-  Eye,
-  ShoppingCart,
-  DollarSign,
-} from 'lucide-react';
+import ListingCard from '../components/ListingCard';
+import SearchFilterBar from '../components/SearchFilterBar';
+import { Camera } from 'lucide-react';
 
 export default function Marketplace() {
   const router = useRouter();
@@ -16,25 +11,20 @@ export default function Marketplace() {
   const [searchQuery, setSearchQuery] = useState('');
   const [locationFilter, setLocationFilter] = useState('all');
 
+  // Check for URL parameters on mount
+  useEffect(() => {
+    if (router.query.search) {
+      setSearchQuery(router.query.search);
+    }
+    if (router.query.location) {
+      setLocationFilter(router.query.location);
+    }
+  }, [router.query]);
+
 
 
   // Mock data
   const mockListings = [
-    {
-      _id: "1",
-      title: "HDPE Plastic Bottles - Grade A",
-      category: "plastic",
-      quantity: { amount: 2.5, unit: "tonnes" },
-      quality: { grade: "A", contamination: 5 },
-      location: { city: "Accra", country: "Ghana" },
-      pricing: { askingPrice: 195000, currency: "KES", negotiable: true },
-      images: ["/HDPE_Plastic_Bottles.jpg"],
-      aiAnalysis: {
-        confidence: 0.94,
-        estimatedValue: { min: 1250, max: 1800 },
-        marketDemand: "High",
-      },
-    },
     {
       _id: "2",
       title: "Cotton Textile Scraps - Mixed Colors",
@@ -323,7 +313,18 @@ export default function Marketplace() {
   ];
 
   useEffect(() => {
-    setListings(mockListings);
+    // Load mock listings
+    let allListings = [...mockListings];
+
+    // Check if user has created a listing
+    const userListing = localStorage.getItem('userListing');
+    if (userListing) {
+      const parsedListing = JSON.parse(userListing);
+      // Add user's listing at the beginning
+      allListings = [parsedListing, ...allListings];
+    }
+
+    setListings(allListings);
   }, []);
 
   const filteredListings = listings.filter(
@@ -353,29 +354,20 @@ export default function Marketplace() {
             </p>
           </div>
 
-          <div className="flex space-x-3 mt-4 md:mt-0">
-            <div className="flex items-center space-x-2 bg-white px-4 py-2 rounded-lg border">
-              <Search className="w-4 h-4 text-gray-400" />
-              <input
-                type="text"
-                placeholder="Search materials..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="border-none outline-none text-sm flex-1 min-w-0"
-              />
-            </div>
-            <select
-              value={locationFilter}
-              onChange={(e) => setLocationFilter(e.target.value)}
-              className="bg-white px-4 py-2 rounded-lg border text-sm"
-            >
-              <option value="all">All Locations</option>
-              <option value="Ghana">Ghana</option>
-              <option value="Nigeria">Nigeria</option>
-              <option value="Kenya">Kenya</option>
-              <option value="South Africa">South Africa</option>
-            </select>
-          </div>
+          <SearchFilterBar
+            searchValue={searchQuery}
+            onSearchChange={setSearchQuery}
+            searchPlaceholder="Search materials..."
+            filterValue={locationFilter}
+            onFilterChange={setLocationFilter}
+            filterOptions={[
+              { value: 'all', label: 'All Locations' },
+              { value: 'Ghana', label: 'Ghana' },
+              { value: 'Nigeria', label: 'Nigeria' },
+              { value: 'Kenya', label: 'Kenya' },
+              { value: 'South Africa', label: 'South Africa' }
+            ]}
+          />
         </div>
 
         <div className="bg-gradient-to-r from-green-600 to-blue-600 text-white p-4 rounded-xl">
@@ -401,101 +393,7 @@ export default function Marketplace() {
 
         <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-6">
           {filteredListings.map((listing) => (
-            <div
-              key={listing._id}
-              className="bg-white rounded-xl shadow-lg border overflow-hidden hover:shadow-xl transition-shadow"
-            >
-              <div className="relative">
-                {listing.images && listing.images.length > 0 ? (
-                  <img
-                    src={listing.images[0]}
-                    alt={listing.title}
-                    className="w-full h-48 object-cover"
-                    onError={(e) => {
-                      e.target.style.display = "none";
-                      e.target.nextSibling.style.display = "flex";
-                    }}
-                  />
-                ) : null}
-                <div
-                  className="w-full h-48 bg-gray-200 flex items-center justify-center"
-                  style={{
-                    display:
-                      listing.images && listing.images.length > 0
-                        ? "none"
-                        : "flex",
-                  }}
-                >
-                  <Camera className="w-12 h-12 text-gray-400" />
-                </div>
-                <div className="absolute top-3 left-3 bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-medium">
-                  Grade {listing.quality?.grade || "B"}
-                </div>
-                {listing.aiAnalysis?.confidence && (
-                  <div className="absolute top-3 right-3 bg-black bg-opacity-70 text-white px-2 py-1 rounded-full text-xs">
-                    {Math.round(listing.aiAnalysis.confidence * 100)}% AI Match
-                  </div>
-                )}
-              </div>
-
-              <div className="p-4">
-                <h3 className="font-bold text-gray-900 mb-2">
-                  {listing.title}
-                </h3>
-
-                <div className="space-y-2 mb-4">
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="text-gray-600">Quantity:</span>
-                    <span className="font-semibold">
-                      {listing.quantity.amount} {listing.quantity.unit}
-                    </span>
-                  </div>
-
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="text-gray-600">Location:</span>
-                    <span className="font-semibold flex items-center">
-                      <MapPin className="w-3 h-3 mr-1" />
-                      {listing.location?.city || "Unknown"}
-                    </span>
-                  </div>
-                </div>
-
-                <div className="flex items-center justify-between mb-4">
-                  <div>
-                    <div className="text-2xl font-bold text-green-600">
-                      KSh{listing.pricing?.askingPrice?.toLocaleString() || "0"}
-                    </div>
-                    {listing.aiAnalysis?.estimatedValue && (
-                      <div className="text-xs text-gray-500">
-                        AI Est: ${listing.aiAnalysis.estimatedValue.min}-$
-                        {listing.aiAnalysis.estimatedValue.max}
-                      </div>
-                    )}
-                  </div>
-                  <div className="text-right">
-                    <div
-                      className={`text-sm font-medium ${
-                        listing.aiAnalysis?.marketDemand === "High"
-                          ? "text-green-600"
-                          : listing.aiAnalysis?.marketDemand === "Medium"
-                          ? "text-yellow-600"
-                          : "text-red-600"
-                      }`}
-                    >
-                      {listing.aiAnalysis?.marketDemand || "Medium"} Demand
-                    </div>
-                  </div>
-                </div>
-
-                <button
-                  onClick={() => router.push(`/product/${listing._id}`)}
-                  className="w-full bg-blue-600 text-white py-2 px-3 rounded-lg text-sm font-semibold hover:bg-blue-700 transition-colors flex items-center justify-center"
-                >
-                  <Eye className="w-4 h-4 mr-2" />
-                  View
-                </button>
-              </div>
-            </div>
+            <ListingCard key={listing._id} listing={listing} />
           ))}
         </div>
 

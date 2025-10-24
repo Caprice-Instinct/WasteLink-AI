@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import Layout from '../components/Layout';
+import MpesaPaymentModal from '../components/MpesaPaymentModal';
 import { Trash2, ArrowLeft, Tag, Undo2 } from 'lucide-react';
 import { useRouter } from 'next/router';
 
@@ -12,6 +13,7 @@ export default function Cart() {
   const [removedItem, setRemovedItem] = useState(null);
   const [undoTimer, setUndoTimer] = useState(null);
   const [selectedPayment, setSelectedPayment] = useState('');
+  const [showMpesaModal, setShowMpesaModal] = useState(false);
 
   // Mock cart item (Glass Bottles)
   const mockCartItem = {
@@ -78,6 +80,14 @@ export default function Cart() {
   const discountAmount = subtotal * discount;
   const tax = (subtotal - discountAmount) * 0.16; // 16% VAT
   const total = subtotal - discountAmount + tax;
+
+  const handleProceedToCheckout = () => {
+    if (selectedPayment === 'mpesa') {
+      setShowMpesaModal(true);
+    } else {
+      alert(`Proceeding with ${selectedPayment}...`);
+    }
+  };
 
   return (
     <Layout cartCount={cartItems.length}>
@@ -165,22 +175,22 @@ export default function Cart() {
                 <div className="space-y-3 mb-4">
                   <div className="flex justify-between">
                     <span>Subtotal</span>
-                    <span>KSh {subtotal.toLocaleString()}</span>
+                    <span>KSh {subtotal.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
                   </div>
                   {discount > 0 && (
                     <div className="flex justify-between text-green-600">
                       <span>Discount ({Math.round(discount * 100)}%)</span>
-                      <span>-KSh {discountAmount.toLocaleString()}</span>
+                      <span>-KSh {discountAmount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
                     </div>
                   )}
                   <div className="flex justify-between">
                     <span>VAT (16%)</span>
-                    <span>KSh {tax.toLocaleString()}</span>
+                    <span>KSh {tax.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
                   </div>
                   <hr />
                   <div className="flex justify-between font-semibold text-lg">
                     <span>Total</span>
-                    <span>KSh {total.toLocaleString()}</span>
+                    <span>KSh {total.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
                   </div>
                 </div>
 
@@ -225,10 +235,10 @@ export default function Cart() {
                   </label>
                   <div className="grid grid-cols-2 gap-2">
                     {[
-                      { id: 'mpesa', name: 'M-Pesa', icon: '📱' },
-                      { id: 'visa', name: 'Visa', icon: '💳' },
-                      { id: 'paypal', name: 'PayPal', icon: '🅿️' },
-                      { id: 'mastercard', name: 'Mastercard', icon: '💳' }
+                      { id: 'mpesa', name: 'M-Pesa' },
+                      { id: 'visa', name: 'Visa' },
+                      { id: 'paypal', name: 'PayPal' },
+                      { id: 'mastercard', name: 'Mastercard' }
                     ].map((method) => (
                       <button
                         key={method.id}
@@ -239,17 +249,14 @@ export default function Cart() {
                             : 'border-gray-300 hover:border-gray-400'
                         }`}
                       >
-                        <div className="flex items-center justify-center space-x-2">
-                          <span>{method.icon}</span>
-                          <span>{method.name}</span>
-                        </div>
+                        <span>{method.name}</span>
                       </button>
                     ))}
                   </div>
                 </div>
 
                 <button
-                  onClick={() => alert(`Proceeding with ${selectedPayment}...`)}
+                  onClick={handleProceedToCheckout}
                   disabled={!selectedPayment}
                   className={`w-full py-3 px-4 rounded-lg font-semibold transition-all ${
                     selectedPayment
@@ -270,6 +277,13 @@ export default function Cart() {
           )}
         </div>
       </div>
+
+      {/* M-Pesa Payment Modal */}
+      <MpesaPaymentModal
+        isOpen={showMpesaModal}
+        onClose={() => setShowMpesaModal(false)}
+        amount={total}
+      />
     </Layout>
   );
 }

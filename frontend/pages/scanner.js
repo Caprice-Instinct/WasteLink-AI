@@ -1,8 +1,10 @@
 import { useState, useRef, useCallback } from 'react';
+import { useRouter } from 'next/router';
 import Layout from '../components/Layout';
 import { Camera } from 'lucide-react';
 
 export default function Scanner() {
+  const router = useRouter();
   const [uploadedImage, setUploadedImage] = useState(null);
   const [wasteQuantity, setWasteQuantity] = useState('');
   const [wasteUnit, setWasteUnit] = useState('kg');
@@ -241,7 +243,35 @@ export default function Scanner() {
                 </div>
 
                 <button
-                  onClick={() => alert('Listing created successfully!')}
+                  onClick={() => {
+                    // Create new listing object
+                    const newListing = {
+                      _id: "user-" + Date.now(),
+                      title: wasteDescription || `${scanResult.materials?.join(', ')} - Grade ${scanResult.grade}`,
+                      category: scanResult.category,
+                      quantity: { amount: parseFloat(wasteQuantity), unit: wasteUnit },
+                      quality: { grade: scanResult.grade, contamination: 5 },
+                      location: { city: "Syokimau", country: "Kenya" },
+                      pricing: {
+                        askingPrice: scanResult.estimatedValue.max,
+                        currency: "KES",
+                        negotiable: true
+                      },
+                      images: [uploadedImage],
+                      aiAnalysis: {
+                        confidence: scanResult.confidence,
+                        estimatedValue: scanResult.estimatedValue,
+                        marketDemand: "High",
+                      },
+                      isOwnListing: true
+                    };
+
+                    // Save to localStorage
+                    localStorage.setItem('userListing', JSON.stringify(newListing));
+
+                    // Redirect to marketplace
+                    router.push('/marketplace');
+                  }}
                   className="w-full bg-green-600 text-white py-3 px-4 rounded-lg font-semibold hover:bg-green-700 transition-colors"
                 >
                   Create Listing ({scanResult.potentialBuyers} Potential Buyers)

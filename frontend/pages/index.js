@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
+import MetricCard from '../components/MetricCard';
+import SDGCard from '../components/SDGCard';
 import {
   Camera,
   Search,
@@ -238,45 +240,40 @@ export default function Home() {
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-16">
-            <div className="bg-gradient-to-br from-green-500 to-emerald-600 text-white p-6 rounded-xl text-center">
-              <Leaf className="w-8 h-8 mx-auto mb-2" />
-              <div className="text-2xl font-bold">12.4K</div>
-              <div className="text-sm opacity-90">Tonnes Diverted</div>
-            </div>
-
-            <div className="bg-gradient-to-br from-blue-500 to-cyan-600 text-white p-6 rounded-xl text-center">
-              <Globe className="w-8 h-8 mx-auto mb-2" />
-              <div className="text-2xl font-bold">8.9K</div>
-              <div className="text-sm opacity-90">CO₂ Saved (kg)</div>
-            </div>
-
-            <div className="bg-gradient-to-br from-purple-500 to-pink-600 text-white p-6 rounded-xl text-center">
-              <DollarSign className="w-8 h-8 mx-auto mb-2" />
-              <div className="text-2xl font-bold">$890K</div>
-              <div className="text-sm opacity-90">Revenue Generated</div>
-            </div>
-
-            <div className="bg-gradient-to-br from-orange-500 to-red-600 text-white p-6 rounded-xl text-center">
-              <Users className="w-8 h-8 mx-auto mb-2" />
-              <div className="text-2xl font-bold">234</div>
-              <div className="text-sm opacity-90">Jobs Created</div>
-            </div>
-
-            <div className="bg-gradient-to-br from-indigo-500 to-purple-600 text-white p-6 rounded-xl text-center">
-              <div className="w-8 h-8 mx-auto mb-2 bg-white/20 rounded-full flex items-center justify-center">
-                <span className="text-xs font-bold">T</span>
-              </div>
-              <div className="text-2xl font-bold">1247</div>
-              <div className="text-sm opacity-90">Transactions</div>
-            </div>
-
-            <div className="bg-gradient-to-br from-teal-500 to-green-600 text-white p-6 rounded-xl text-center">
-              <div className="w-8 h-8 mx-auto mb-2 bg-white/20 rounded-full flex items-center justify-center">
-                <span className="text-xs font-bold">W</span>
-              </div>
-              <div className="text-2xl font-bold">46K</div>
-              <div className="text-sm opacity-90">Liters Water Saved</div>
-            </div>
+            <MetricCard
+              icon={Leaf}
+              value="12.4K"
+              label="Tonnes Diverted"
+              gradient="from-green-500 to-emerald-600"
+            />
+            <MetricCard
+              icon={Globe}
+              value="8.9K"
+              label="CO₂ Saved (kg)"
+              gradient="from-blue-500 to-cyan-600"
+            />
+            <MetricCard
+              icon={DollarSign}
+              value="$890K"
+              label="Revenue Generated"
+              gradient="from-purple-500 to-pink-600"
+            />
+            <MetricCard
+              icon={Users}
+              value="234"
+              label="Jobs Created"
+              gradient="from-orange-500 to-red-600"
+            />
+            <MetricCard
+              value="1247"
+              label="Transactions"
+              gradient="from-indigo-500 to-purple-600"
+            />
+            <MetricCard
+              value="46K"
+              label="Liters Water Saved"
+              gradient="from-teal-500 to-green-600"
+            />
           </div>
 
           <div className="bg-white rounded-xl p-6 shadow-lg border mb-16">
@@ -284,26 +281,34 @@ export default function Home() {
               UN SDG Contribution
             </h3>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <div className="text-center p-4 bg-yellow-50 rounded-lg">
-                <div className="text-3xl font-bold text-yellow-600">SDG 8</div>
-                <div className="text-sm text-gray-700 mt-1">Decent Work</div>
-                <div className="text-xs text-gray-600">234 jobs created</div>
-              </div>
-              <div className="text-center p-4 bg-blue-50 rounded-lg">
-                <div className="text-3xl font-bold text-blue-600">SDG 11</div>
-                <div className="text-sm text-gray-700 mt-1">Sustainable Cities</div>
-                <div className="text-xs text-gray-600">12.4K tonnes processed</div>
-              </div>
-              <div className="text-center p-4 bg-green-50 rounded-lg">
-                <div className="text-3xl font-bold text-green-600">SDG 12</div>
-                <div className="text-sm text-gray-700 mt-1">Responsible Consumption</div>
-                <div className="text-xs text-gray-600">$890K circular revenue</div>
-              </div>
-              <div className="text-center p-4 bg-emerald-50 rounded-lg">
-                <div className="text-3xl font-bold text-emerald-600">SDG 13</div>
-                <div className="text-sm text-gray-700 mt-1">Climate Action</div>
-                <div className="text-xs text-gray-600">8.9K kg CO₂ saved</div>
-              </div>
+              <SDGCard
+                number="8"
+                title="Decent Work"
+                description="234 jobs created"
+                bgColor="bg-yellow-50"
+                textColor="text-yellow-600"
+              />
+              <SDGCard
+                number="11"
+                title="Sustainable Cities"
+                description="12.4K tonnes processed"
+                bgColor="bg-blue-50"
+                textColor="text-blue-600"
+              />
+              <SDGCard
+                number="12"
+                title="Responsible Consumption"
+                description="$890K circular revenue"
+                bgColor="bg-green-50"
+                textColor="text-green-600"
+              />
+              <SDGCard
+                number="13"
+                title="Climate Action"
+                description="8.9K kg CO₂ saved"
+                bgColor="bg-emerald-50"
+                textColor="text-emerald-600"
+              />
             </div>
           </div>
 

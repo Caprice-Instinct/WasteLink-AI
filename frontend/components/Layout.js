@@ -16,7 +16,12 @@ export default function Layout({ children, cartCount = 0 }) {
   const router = useRouter();
   const [showChatbot, setShowChatbot] = useState(false);
   const [cart, setCart] = useState([]);
-  const [chatMessages, setChatMessages] = useState([]);
+  const [chatMessages, setChatMessages] = useState([
+    {
+      type: 'bot',
+      text: "Hi! 👋 I'm TakaBot, your waste trading assistant. I can help you with:\n\n• Finding waste materials near you\n• Checking market prices and demand\n• Using the AI scanner\n• Understanding quality grades\n\nWhat can I help you with today?"
+    }
+  ]);
   const [chatInput, setChatInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const [typingText, setTypingText] = useState('');
@@ -30,10 +35,8 @@ export default function Layout({ children, cartCount = 0 }) {
   ];
 
   const presetQuestions = [
-    "How do I price my waste materials?",
     "What types of waste have highest demand?",
     "How does the AI scanner work?",
-    "How to improve waste quality grade?"
   ];
 
   const handleChatSubmit = useCallback((message) => {
@@ -57,7 +60,13 @@ export default function Layout({ children, cartCount = 0 }) {
       const lowerMessage = message.toLowerCase();
       if (lowerMessage.includes('glass') && (lowerMessage.includes('near') || lowerMessage.includes('looking'))) {
         fullResponse = "I found 1 glass bottle listing near you! There's a supplier in Thika, Kenya offering 'Glass Bottles - Mixed' (500 kg, Grade B) for KSh 19,500. The listing has medium market demand and is negotiable. Click below to view it in the marketplace.";
-        hasButton = { text: "View Glass Bottles", action: () => { router.push('/marketplace'); setSearchQuery('glass'); setShowChatbot(false); } };
+        hasButton = {
+          text: "View Glass Bottles",
+          action: () => {
+            router.push('/marketplace?search=glass&location=Kenya');
+            setShowChatbot(false);
+          }
+        };
       } else if (!fullResponse) {
         fullResponse = "I can help with waste trading, pricing, and platform features. Try asking about pricing, demand, or how our AI scanner works!";
       }
@@ -84,8 +93,8 @@ export default function Layout({ children, cartCount = 0 }) {
           setChatMessages(prev => [...prev, { type: 'bot', text: fullResponse, button: hasButton }]);
           setTypingText("");
         }
-      }, 20);
-    }, 2000);
+      }, 10);
+    }, 1500);
   }, [router]);
 
   return (
@@ -194,15 +203,10 @@ export default function Layout({ children, cartCount = 0 }) {
             </button>
           </div>
           <div className="h-64 overflow-y-auto p-4 space-y-3">
-            {chatMessages.length === 0 && (
-              <div className="text-gray-500 text-sm">
-                Hi! I'm TakaBot, your waste trading assistant. Try the buttons below or ask anything!
-              </div>
-            )}
             {chatMessages.map((msg, idx) => (
               <div key={idx} className={`text-sm ${msg.type === 'user' ? 'text-right' : 'text-left'}`}>
                 <div className={`inline-block p-2 rounded-lg max-w-xs ${msg.type === 'user' ? 'bg-green-100' : 'bg-gray-100'}`}>
-                  {msg.text}
+                  <div className="whitespace-pre-line">{msg.text}</div>
                   {msg.button && (
                     <button
                       onClick={msg.button.action}

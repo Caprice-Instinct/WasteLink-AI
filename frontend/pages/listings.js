@@ -1,7 +1,10 @@
 import { useState } from 'react';
 import Layout from '../components/Layout';
 import Link from 'next/link';
-import { Search, Plus, Eye } from 'lucide-react';
+import SearchFilterBar from '../components/SearchFilterBar';
+import StatusBadge from '../components/StatusBadge';
+import MetricCard from '../components/MetricCard';
+import { Search, Plus, Eye, DollarSign, Users } from 'lucide-react';
 
 export default function Listings() {
   const [myListingsSearch, setMyListingsSearch] = useState('');
@@ -105,26 +108,6 @@ export default function Listings() {
     return matchesSearch && matchesStatus;
   });
 
-  const getStatusColor = (status) => {
-    switch (status) {
-      case "active": return "bg-green-100 text-green-800";
-      case "sold": return "bg-blue-100 text-blue-800";
-      case "payment_pending": return "bg-yellow-100 text-yellow-800";
-      case "expired": return "bg-red-100 text-red-800";
-      default: return "bg-gray-100 text-gray-800";
-    }
-  };
-
-  const getStatusLabel = (status) => {
-    switch (status) {
-      case "active": return "Active";
-      case "sold": return "Sold";
-      case "payment_pending": return "Payment Pending";
-      case "expired": return "Expired";
-      default: return status;
-    }
-  };
-
   const activeCount = myListingsData.filter(l => l.status === "active").length;
   const totalRevenue = myListingsData.filter(l => l.status === "sold").reduce((sum, l) => sum + (l.soldPrice || 0), 0);
   const totalViews = myListingsData.reduce((sum, l) => sum + (l.views || 0), 0);
@@ -148,31 +131,20 @@ export default function Listings() {
 
         {/* Search and Filter */}
         <div className="bg-white p-4 rounded-xl shadow border">
-          <div className="flex flex-col md:flex-row gap-4">
-            <div className="flex-1">
-              <div className="flex items-center space-x-2 bg-gray-50 px-4 py-2 rounded-lg border">
-                <Search className="w-4 h-4 text-gray-400" />
-                <input
-                  type="text"
-                  placeholder="Search by name, material, or client..."
-                  value={myListingsSearch}
-                  onChange={(e) => setMyListingsSearch(e.target.value)}
-                  className="border-none outline-none text-sm flex-1 bg-transparent"
-                />
-              </div>
-            </div>
-            <select
-              value={myListingsStatusFilter}
-              onChange={(e) => setMyListingsStatusFilter(e.target.value)}
-              className="bg-white px-4 py-2 rounded-lg border text-sm"
-            >
-              <option value="all">All Status</option>
-              <option value="active">Active</option>
-              <option value="sold">Sold</option>
-              <option value="payment_pending">Payment Pending</option>
-              <option value="expired">Expired</option>
-            </select>
-          </div>
+          <SearchFilterBar
+            searchValue={myListingsSearch}
+            onSearchChange={setMyListingsSearch}
+            searchPlaceholder="Search by name, material, or client..."
+            filterValue={myListingsStatusFilter}
+            onFilterChange={setMyListingsStatusFilter}
+            filterOptions={[
+              { value: 'all', label: 'All Status' },
+              { value: 'active', label: 'Active' },
+              { value: 'sold', label: 'Sold' },
+              { value: 'payment_pending', label: 'Payment Pending' },
+              { value: 'expired', label: 'Expired' }
+            ]}
+          />
         </div>
 
         {/* Stats */}
@@ -237,9 +209,7 @@ export default function Listings() {
                         ? listing.soldPrice
                         : listing.pricing.askingPrice).toLocaleString()}
                     </div>
-                    <span className={`inline-block px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(listing.status)}`}>
-                      {getStatusLabel(listing.status)}
-                    </span>
+                    <StatusBadge status={listing.status} />
                     {listing.status === "sold" && listing.soldDate && (
                       <p className="text-xs text-gray-500 mt-1">
                         Completed on {listing.soldDate}
